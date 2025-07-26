@@ -18,27 +18,29 @@
       </template>
     </div>
   </nav>
-  <nav class="flex md:hidden justify-between items-center p-4 shadow flex-row-reverse">
-    <a
-      v-for="link in mobileTopLinks"
-      :key="link.name + '-mobile-top'"
-      :href="link.href"
-      class="min-w-[44px] min-h-[44px] flex items-center justify-center"
-    >
-      <NavIcon :icon="link.icon" :alt="link.alt" :name="link.name" :img-size="'w-11'" />
-    </a>
-    <div class="flex-1 mx-2">
-      <SearchInput class="w-full" />
-    </div>
-  </nav>
-  <nav
-    class="fixed bottom-0 left-0 right-0 shadow-inner flex justify-around p-2 md:hidden bg-white"
-  >
-    <template v-for="link in mobileBottomLinks" :key="link.name + '-mobile-bottom'">
-      <a :href="link.href" class="min-w-[44px] min-h-[44px] flex items-center justify-center">
+
+  <nav class="md:hidden">
+    <div class="flex justify-between items-center p-4 shadow flex-row-reverse">
+      <a
+        v-for="link in mobileTopLinks"
+        :key="link.name + '-mobile-top'"
+        :href="link.href"
+        class="min-w-[44px] min-h-[44px] flex items-center justify-center"
+      >
         <NavIcon :icon="link.icon" :alt="link.alt" :name="link.name" :img-size="'w-11'" />
       </a>
-    </template>
+      <div class="flex-1 mx-2">
+        <SearchInput class="w-full" />
+      </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 shadow-inner flex justify-around p-2 bg-white">
+      <template v-for="link in mobileBottomLinks" :key="link.name + '-mobile-bottom'">
+        <a :href="link.href" class="min-w-[44px] min-h-[44px] flex items-center justify-center">
+          <NavIcon :icon="link.icon" :alt="link.alt" :name="link.name" :img-size="'w-11'" />
+        </a>
+      </template>
+    </div>
   </nav>
 </template>
 
