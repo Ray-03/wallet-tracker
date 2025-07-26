@@ -7,8 +7,6 @@ import AppNav from './components/AppNav.vue'
     <AppNav />
   </header>
   <main>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam ipsam eos sapiente veritatis
-    quos voluptatem, tenetur possimus aspernatur perspiciatis impedit ullam cum officia voluptates
-    voluptatibus, ut rerum, nisi saepe amet.
+    <router-view />
   </main>
 </template>
