@@ -24,3 +24,10 @@ export interface Product {
   category: string
   image: string
 }
+
+export interface ProductsState {
+  products: Product[]
+  product: Product | null
+  loading: boolean
+  error: string | null
+}
