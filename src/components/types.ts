@@ -7,3 +7,11 @@ export interface NavIconProps {
 export interface INavLink extends NavIconProps {
   href: string
 }
+
+export enum NavSection {
+  Home = 'Home',
+  Wallet = 'Wallet',
+  History = 'History',
+  Cart = 'Cart',
+  Search = 'Search',
+}
