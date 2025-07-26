@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        primary: '#4B4AD2',
         background: 'var(--color-background)',
         'background-soft': 'var(--color-background-soft)',
         'background-mute': 'var(--color-background-mute)',
