@@ -6,8 +6,13 @@ defineProps<NavIconProps>()
 
 <template>
   <span>
-    <template v-if="typeof icon === 'string'">
-      <img :src="icon" :alt="alt || name" :class="'w-11 h-11' + ' object-cover'" />
+    <template v-if="icon">
+      <template v-if="typeof icon === 'string'">
+        <img :src="icon" :alt="alt || name" :class="'w-11 h-11' + ' object-cover'" />
+      </template>
+      <template v-else>
+        <component :is="icon" :alt="alt || name" class="w-11 h-11 object-cover" />
+      </template>
     </template>
     <template v-else>
       {{ name }}
