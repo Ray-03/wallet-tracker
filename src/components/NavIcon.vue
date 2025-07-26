@@ -1,9 +1,7 @@
 <script setup lang="ts">
-defineProps({
-  icon: [String, Object],
-  alt: String,
-  name: String,
-})
+import type { NavIconProps } from './types.ts'
+
+defineProps<NavIconProps>()
 </script>
 
 <template>
