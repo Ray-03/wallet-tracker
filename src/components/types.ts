@@ -15,3 +15,12 @@ export enum NavSection {
   Cart = 'Cart',
   Search = 'Search',
 }
+
+export interface Product {
+  id?: number
+  title: string
+  price: number
+  description: string
+  category: string
+  image: string
+}
