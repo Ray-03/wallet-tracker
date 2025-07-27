@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         primary: '#4B4AD2',
+        secondary: '#F8F8F8',
         background: 'var(--color-background)',
         'background-soft': 'var(--color-background-soft)',
         'background-mute': 'var(--color-background-mute)',
