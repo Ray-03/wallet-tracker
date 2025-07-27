@@ -8,7 +8,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <div class="aspect-square overflow-hidden outline-double outline-primary">
+  <div class="aspect-square overflow-hidden outline-primary rounded-lg">
     <picture>
       <source media="(min-width: 768px)" :srcset="image" />
       <source media="(min-width: 480px)" :srcset="alt" />
