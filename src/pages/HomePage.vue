@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import ProductsList from '@/components/ProductsList.vue'
+import ProductList from '@/components/Products/ProductList.vue'
 </script>
 
 <template>
   <Suspense>
     <template #default>
-      <ProductsList />
+      <ProductList />
     </template>
     <template #fallback>
       <div class="p-4 text-center">Loading products...</div>
