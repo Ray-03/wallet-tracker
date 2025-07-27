@@ -10,7 +10,7 @@ defineProps<Props>()
 
 <template>
   <div
-    class="bg-white rounded-lg border-t-2 border-primary shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+    class="bg-white rounded-lg border-t-2 border-primary shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 group"
   >
     <div class="aspect-square overflow-hidden outline-double outline-primary">
       <picture>
@@ -19,7 +19,7 @@ defineProps<Props>()
         <img
           :src="product.image"
           :alt="product.title"
-          class="w-full h-full object-contain p-4"
+          class="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-110"
           loading="lazy"
           decoding="async"
         />
@@ -35,7 +35,7 @@ defineProps<Props>()
         </span>
       </div>
 
-      <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+      <h3 class="text-lg font-semibold text-gray-900 mb-2">
         {{ product.title }}
       </h3>
 
@@ -62,19 +62,3 @@ defineProps<Props>()
     </div>
   </div>
 </template>
-
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>
