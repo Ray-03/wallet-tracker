@@ -4,32 +4,43 @@ import CardHeader from './CardHeader.vue'
 import CardBody from './CardBody.vue'
 
 interface Props {
-  product: Product
+  product?: Product
+  loading?: boolean
 }
 
 interface Emits {
   (e: 'click', product: Product): void
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  loading: false,
+})
 const emit = defineEmits<Emits>()
 
 const handleClick = () => {
-  emit('click', props.product)
+  if (props.product && !props.loading) {
+    emit('click', props.product)
+  }
 }
 </script>
 
 <template>
   <div
-    class="bg-white rounded-lg border-y-4 border-primary shadow-md hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
+    class="bg-white rounded-lg border-y-4 shadow-md transition-shadow duration-300 group cursor-pointer"
+    :class="[loading ? 'border-gray-200' : 'border-primary hover:shadow-xl']"
     role="button"
     tabindex="0"
-    :aria-label="`View details for ${product.title}`"
+    :aria-label="loading ? 'Loading product' : `View details for ${product?.title}`"
     @click="handleClick"
     @keydown.enter="handleClick"
     @keydown.space.prevent="handleClick"
   >
-    <CardHeader :alt="product.title" :image="product.image" />
-    <CardBody :category="product.category" :price="product.price" :title="product.title" />
+    <CardHeader :loading="loading" :alt="product?.title" :image="product?.image" />
+    <CardBody
+      :loading="loading"
+      :category="product?.category"
+      :price="product?.price"
+      :title="product?.title"
+    />
   </div>
 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ProductList from '@/components/Products/ProductList.vue'
+import ProductCard from '@/components/Products/ProductCard.vue'
 </script>
 
 <template>
@@ -8,7 +9,11 @@ import ProductList from '@/components/Products/ProductList.vue'
       <ProductList />
     </template>
     <template #fallback>
-      <div class="p-4 text-center">Loading products...</div>
+      <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <ProductCard v-for="index in 8" :key="index" :loading="true" />
+        </div>
+      </div>
     </template>
   </Suspense>
 </template>
