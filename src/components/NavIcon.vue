@@ -8,10 +8,10 @@ defineProps<NavIconProps>()
   <span>
     <template v-if="icon">
       <template v-if="typeof icon === 'string'">
-        <img :src="icon" :alt="alt || name" :class="'w-11 h-11' + ' object-cover'" />
+        <img :src="icon" :alt="alt || name" :class="'w-12 h-12' + ' object-cover'" />
       </template>
       <template v-else>
-        <component :is="icon" :alt="alt || name" class="w-11 h-11 object-cover" />
+        <component :is="icon" :alt="alt || name" class="w-6 h-6 object-cover" />
       </template>
     </template>
     <template v-else>
