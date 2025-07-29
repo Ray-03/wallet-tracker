@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import IconPlus from '../icons/IconPlus.vue'
+
 interface Props {
   title?: string
   price?: number
@@ -12,7 +14,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div class="p-4 bg-secondary flex flex-col gap-2 h-full max-h-40 overflow-hidden">
+  <div class="p-4 bg-secondary flex flex-col gap-2 h-full">
     <template v-if="loading">
       <div>
         <div class="inline-block h-6 w-20 rounded-full skeleton-shimmer"></div>
@@ -32,22 +34,22 @@ withDefaults(defineProps<Props>(), {
     <template v-else-if="title && price !== undefined && category">
       <div>
         <span
-          class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-medium"
+          class="inline-block bg-primary-100 text-primary-700 text-xs px-2 py-1 rounded-full font-medium"
         >
           {{ category }}
         </span>
       </div>
 
-      <h3 class="text-lg font-semibold text-gray-900 line-clamp-2 flex-shrink-0 flex-1">
+      <h3 class="text-base font-semibold text-gray-900 line-clamp-2 flex-1">
         {{ title }}
       </h3>
 
-      <div class="flex justify-between">
-        <span class="text-xl font-bold text-green-600 flex-shrink-0">${{ price.toFixed(2) }}</span>
+      <div class="flex justify-between items-center">
+        <span class="text-lg font-bold text-green-600 flex-shrink-0">${{ price.toFixed(2) }}</span>
         <button
-          class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors"
+          class="bg-primary-500 hover:bg-primary-700 text-white p-2 rounded-md transition-colors flex items-center justify-center flex-shrink-0"
         >
-          Add to Cart
+          <IconPlus />
         </button>
       </div>
     </template>

@@ -11,7 +11,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div class="aspect-square overflow-hidden outline-primary rounded-lg">
+  <div class="aspect-square overflow-hidden outline-primary-500 rounded-lg flex-shrink-0">
     <template v-if="loading">
       <div class="w-full h-full skeleton-shimmer"></div>
     </template>

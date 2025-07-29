@@ -29,7 +29,7 @@ await store.getAllProducts()
       <p class="text-gray-600 mb-4">{{ store.error }}</p>
       <button
         @click="store.getAllProducts()"
-        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+        class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
       >
         Try Again
       </button>

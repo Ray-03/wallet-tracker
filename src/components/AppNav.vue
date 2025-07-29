@@ -2,7 +2,7 @@
   <nav class="hidden md:flex justify-between items-center p-4 shadow flex-row">
     <a
       :href="homeLink.href"
-      class="flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+      class="flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500"
       aria-label="Go to Home"
     >
       <NavIcon :icon="homeLink.icon" :alt="homeLink.alt" :name="homeLink.name" />

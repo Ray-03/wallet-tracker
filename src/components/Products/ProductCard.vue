@@ -26,8 +26,8 @@ const handleClick = () => {
 
 <template>
   <div
-    class="bg-white rounded-lg border-y-4 shadow-md transition-shadow duration-300 group cursor-pointer"
-    :class="[loading ? 'border-gray-200' : 'border-primary hover:shadow-xl']"
+    class="bg-white rounded-lg border-y-4 shadow-md transition-shadow duration-300 group cursor-pointer h-full flex flex-col"
+    :class="[loading ? 'border-gray-200' : 'border-primary-500 hover:shadow-xl']"
     role="button"
     tabindex="0"
     :aria-label="loading ? 'Loading product' : `View details for ${product?.title}`"
