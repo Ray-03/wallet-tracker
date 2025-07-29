@@ -4,7 +4,7 @@ import CardHeader from './CardHeader.vue'
 import CardBody from './CardBody.vue'
 
 interface Props {
-  product?: Product
+  product: Product
   loading?: boolean
 }
 
@@ -36,11 +36,6 @@ const handleClick = () => {
     @keydown.space.prevent="handleClick"
   >
     <CardHeader :loading="loading" :alt="product?.title" :image="product?.image" />
-    <CardBody
-      :loading="loading"
-      :category="product?.category"
-      :price="product?.price"
-      :title="product?.title"
-    />
+    <CardBody :loading="loading" :product="product" />
   </div>
 </template>

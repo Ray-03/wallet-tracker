@@ -158,8 +158,6 @@ const handleTopUp = async () => {
     )
     emit('success', transaction)
     closeModal()
-  } catch {
-    // Error is already handled in the store
-  }
+  } catch {}
 }
 </script>
