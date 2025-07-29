@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import type { LineItem } from './cart'
 
 export interface Transaction {
   id: string
@@ -7,6 +8,9 @@ export interface Transaction {
   description: string
   timestamp: Date
   status: 'completed' | 'pending' | 'failed'
+
+  items?: LineItem[]
+  invoiceNumber?: string
 }
 
 export interface WalletState {
@@ -75,11 +79,16 @@ export const useWalletStore = defineStore('wallet', {
       }
     },
 
-    async makePurchase(amount: number, description: string) {
+    async makePurchase(items: LineItem[], description: string) {
       this.setLoading(true)
       this.setError(null)
 
       try {
+        if (!items.length) {
+          throw new Error('No items to purchase')
+        }
+
+        const amount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
         if (amount <= 0) {
           throw new Error('Purchase amount must be greater than 0')
         }
@@ -88,6 +97,8 @@ export const useWalletStore = defineStore('wallet', {
           throw new Error('Insufficient balance')
         }
 
+        const invoiceNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 10000)}`
+
         const transaction: Transaction = {
           id: `tx_${Math.floor(Date.now() / 1000)}_${Math.random().toString(36).substring(2, 9)}`,
           type: 'purchase',
@@ -95,6 +106,8 @@ export const useWalletStore = defineStore('wallet', {
           description,
           timestamp: new Date(),
           status: 'completed',
+          items,
+          invoiceNumber,
         }
 
         this.balance -= amount
