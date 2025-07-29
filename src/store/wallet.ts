@@ -11,6 +11,7 @@ export interface Transaction {
 
 export interface WalletState {
   balance: number
+  transactionId: number
   transactions: Transaction[]
   loading: boolean
   error: string | null
@@ -19,8 +20,16 @@ export interface WalletState {
 export const useWalletStore = defineStore('wallet', {
   state: (): WalletState => ({
     balance: 0,
+    transactionId: 0,
     transactions: [],
     loading: false,
     error: null,
   }),
+
+  getters: {
+    getBalance: (state) => state.balance,
+    getTransaction: (state) => (id: string) => state.transactions.find((t) => t.id === id),
+    getTransactionHistory: (state) =>
+      state.transactions.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()),
+  },
 })
