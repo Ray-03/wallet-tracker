@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useCartStore } from '@/store/cart'
-import IconPlus from '../icons/IconPlus.vue'
 import type { Product } from '../types'
+import CartAction from './CartAction.vue'
 
 interface Props {
   product: Product
@@ -12,14 +11,6 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
 })
 const { category, price, title } = props.product
-
-const cartStore = useCartStore()
-
-const handleAddToCart = () => {
-  if (props.product && !props.loading) {
-    cartStore.addItem(props.product, 1)
-  }
-}
 </script>
 
 <template>
@@ -55,12 +46,7 @@ const handleAddToCart = () => {
 
       <div class="flex justify-between items-center">
         <span class="text-lg font-bold text-green-600 flex-shrink-0">${{ price.toFixed(2) }}</span>
-        <button
-          class="bg-primary-500 hover:bg-primary-700 text-white p-2 rounded-md transition-colors flex items-center justify-center flex-shrink-0"
-          @click="handleAddToCart"
-        >
-          <IconPlus />
-        </button>
+        <CartAction :product="props.product" />
       </div>
     </template>
   </div>
