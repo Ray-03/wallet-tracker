@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { Product, ProductsState } from '../components/types'
 import { apiRequest } from '@/backend/api'
+import { type WalletError } from '@/utils/errors'
 
 const API_URL = 'https://fakestoreapi.com/products'
 
@@ -15,7 +16,7 @@ export const useProductsStore = defineStore('products', {
     setLoading(loading: boolean) {
       this.loading = loading
     },
-    setError(error: string | null) {
+    setError(error: WalletError | null) {
       this.error = error
     },
     async getAllProducts() {
