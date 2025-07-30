@@ -26,29 +26,47 @@
         @close="showTopUpModal = false"
         @success="handleTopUpSuccess"
       />
+
+      <ErrorDisplay
+        :error="walletStore.error"
+        :dismissible="true"
+        @dismiss="walletStore.setError(null)"
+        @navigate-to-wallet="handleNavigateToWallet"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useWalletStore } from '@/store/wallet'
 import WalletBalance from '@/components/Wallet/WalletBalance.vue'
 import TransactionHistory from '@/components/Wallet/TransactionHistory.vue'
 import TopUpModal from '@/components/Wallet/TopUpModal.vue'
+import ErrorDisplay from '@/components/ErrorDisplay.vue'
 
+const route = useRoute()
 const walletStore = useWalletStore()
 const showTopUpModal = ref(false)
 const showSuccessMessage = ref(false)
 
 const handleTopUpSuccess = () => {
   showSuccessMessage.value = true
+  walletStore.setError(null)
   setTimeout(() => {
     showSuccessMessage.value = false
   }, 3000)
 }
 
+const handleNavigateToWallet = () => {
+  walletStore.setError(null)
+  showTopUpModal.value = true
+}
+
 onMounted(() => {
-  walletStore.initializeWallet()
+  if (route.query.openTopUp === 'true') {
+    showTopUpModal.value = true
+  }
 })
 </script>

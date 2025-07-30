@@ -29,19 +29,34 @@
         </div>
       </div>
     </div>
+
+    <ErrorDisplay
+      :error="walletStore.error"
+      :dismissible="true"
+      @dismiss="walletStore.setError(null)"
+      @navigate-to-wallet="handleNavigateToWallet"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useWalletStore } from '@/store/wallet'
+import ErrorDisplay from '@/components/ErrorDisplay.vue'
 
+const router = useRouter()
 const walletStore = useWalletStore()
 const purchases = computed(() =>
   walletStore.getTransactionHistory.filter(
     (tx) => tx.type === 'purchase' && tx.items && tx.invoiceNumber,
   ),
 )
+
+function handleNavigateToWallet() {
+  walletStore.setError(null)
+  router.push('/wallet?openTopUp=true')
+}
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('en-US', {
