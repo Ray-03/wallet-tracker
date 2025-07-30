@@ -13,7 +13,12 @@
     <div class="flex gap-4 items-center">
       <template v-for="link in desktopLinks" :key="link.name">
         <a :href="link.href" class="items-center justify-center">
-          <NavIcon :icon="link.icon" :alt="link.alt" :name="link.name" />
+          <NavIcon
+            :icon="link.icon"
+            :alt="link.alt"
+            :name="link.name"
+            :count="link.name === NavSection.Cart ? cartItemCount : undefined"
+          />
         </a>
       </template>
     </div>
@@ -27,7 +32,13 @@
         :href="link.href"
         class="min-w-[44px] min-h-[44px] flex items-center justify-center"
       >
-        <NavIcon :icon="link.icon" :alt="link.alt" :name="link.name" :img-size="'w-11'" />
+        <NavIcon
+          :icon="link.icon"
+          :alt="link.alt"
+          :name="link.name"
+          :img-size="'w-11'"
+          :count="link.name === NavSection.Cart ? cartItemCount : undefined"
+        />
       </a>
       <div class="flex-1 mx-2">
         <SearchInput class="w-full" />
@@ -37,7 +48,13 @@
     <div class="fixed bottom-0 left-0 right-0 shadow-inner flex justify-around p-2 bg-white">
       <template v-for="link in mobileBottomLinks" :key="link.name + '-mobile-bottom'">
         <a :href="link.href" class="min-w-[44px] min-h-[44px] flex items-center justify-center">
-          <NavIcon :icon="link.icon" :alt="link.alt" :name="link.name" :img-size="'w-11'" />
+          <NavIcon
+            :icon="link.icon"
+            :alt="link.alt"
+            :name="link.name"
+            :img-size="'w-11'"
+            :count="link.name === NavSection.Cart ? cartItemCount : undefined"
+          />
         </a>
       </template>
     </div>
@@ -45,12 +62,20 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import NavIcon from './NavIcon.vue'
 import SearchInput from './SearchInput.vue'
 import IconShoppingBag from './icons/IconShoppingBag.vue'
 import IconMagnifier from './icons/IconMagnifier.vue'
 import { NavSection } from './types'
 import type { INavLink } from './types'
+import { useCartStore } from '@/store/cart'
+
+const cartStore = useCartStore()
+
+const cartItemCount = computed(() =>
+  cartStore.itemsArray.reduce((total, item) => total + item.quantity, 0),
+)
 
 const baseLinks: Record<NavSection, Partial<INavLink> & { name: NavSection }> = {
   [NavSection.Home]: { name: NavSection.Home, href: '/', icon: '/icon.jpg', alt: 'Home' },

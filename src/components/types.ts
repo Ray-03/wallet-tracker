@@ -2,6 +2,7 @@ export interface NavIconProps {
   icon?: string | object
   alt?: string
   name?: string
+  count?: number
 }
 
 export interface INavLink extends NavIconProps {

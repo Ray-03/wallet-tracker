@@ -45,7 +45,9 @@ const { category, price, title } = props.product
       </h3>
 
       <div class="flex justify-between items-center">
-        <span class="text-lg font-bold text-green-600 flex-shrink-0">${{ price.toFixed(2) }}</span>
+        <div class="flex items-center space-x-2">
+          <span class="text-lg font-bold text-green-600">${{ price.toFixed(2) }}</span>
+        </div>
         <CartAction :product="props.product" />
       </div>
     </template>
