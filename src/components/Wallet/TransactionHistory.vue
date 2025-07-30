@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useWalletStore } from '@/store/wallet'
-import type { Transaction } from '@/store/wallet'
+import type { Transaction } from '@/types'
 
 const walletStore = useWalletStore()
 const filterType = ref('')

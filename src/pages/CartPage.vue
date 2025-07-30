@@ -13,7 +13,7 @@
         <img :src="item.image" :alt="item.title" class="w-16 h-16 object-cover rounded mr-4" />
         <div class="flex-1">
           <div class="font-semibold">{{ item.title }}</div>
-          <div class="text-gray-500">${{ item.price.toFixed(2) }}</div>
+          <div class="text-gray-500">{{ formatCurrency(item.price) }}</div>
         </div>
         <div class="flex items-center space-x-2">
           <CartAction :product="item" />
@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="flex justify-between items-center mt-6">
-        <div class="text-lg font-semibold">Total: ${{ total.toFixed(2) }}</div>
+        <div class="text-lg font-semibold">Total: {{ formatCurrency(total) }}</div>
         <button
           class="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-md font-medium"
           :disabled="cartStore.itemsArray.length === 0 || walletStore.loading"
@@ -62,6 +62,8 @@ import { useWalletStore } from '@/store/wallet'
 import ErrorDisplay from '@/components/ErrorDisplay.vue'
 import CheckoutModal from '@/components/Cart/CheckoutModal.vue'
 import CartAction from '@/components/Products/CartAction.vue'
+import { calculateTotal, formatCurrency } from '@/utils/ui'
+import { UI_CONSTANTS } from '@/constants'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -69,9 +71,7 @@ const walletStore = useWalletStore()
 const successMessage = ref(false)
 const showCheckoutModal = ref(false)
 
-const total = computed(() =>
-  cartStore.itemsArray.reduce((sum, item) => sum + item.price * item.quantity, 0),
-)
+const total = computed(() => calculateTotal(cartStore.itemsArray))
 
 function removeItem(id: number) {
   cartStore.removeItem(id)
@@ -79,13 +79,13 @@ function removeItem(id: number) {
 
 function handleNavigateToWallet() {
   walletStore.setError(null)
-  router.push('/wallet?openTopUp=true')
+  router.push(`/wallet?${UI_CONSTANTS.TOP_UP_MODAL_PARAM}=true`)
 }
 
 function handleTopUpFromModal() {
   walletStore.setError(null)
   showCheckoutModal.value = false
-  router.push('/wallet?openTopUp=true')
+  router.push(`/wallet?${UI_CONSTANTS.TOP_UP_MODAL_PARAM}=true`)
 }
 
 async function processCheckout() {
@@ -94,7 +94,7 @@ async function processCheckout() {
     cartStore.clearCart()
     showCheckoutModal.value = false
     successMessage.value = true
-    setTimeout(() => (successMessage.value = false), 3000)
+    setTimeout(() => (successMessage.value = false), UI_CONSTANTS.SUCCESS_MESSAGE_DURATION)
   } catch {}
 }
 </script>

@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import { useProductsStore } from '@/store/products'
 import ProductCard from './ProductCard.vue'
 import ErrorDisplay from '@/components/ErrorDisplay.vue'
-import type { Product } from '@/components/types'
+import type { Product } from '@/types'
 
 const router = useRouter()
 const store = useProductsStore()

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { Product } from '../types'
+import type { Product } from '@/types'
 import CartAction from './CartAction.vue'
+import { formatCurrency } from '@/utils/ui'
 
 interface Props {
   product: Product
@@ -46,7 +47,7 @@ const { category, price, title } = props.product
 
       <div class="flex justify-between items-center">
         <div class="flex items-center space-x-2">
-          <span class="text-lg font-bold text-green-600">${{ price.toFixed(2) }}</span>
+          <span class="text-lg font-bold text-green-600">{{ formatCurrency(price) }}</span>
         </div>
         <CartAction :product="props.product" />
       </div>

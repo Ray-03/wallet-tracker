@@ -21,12 +21,6 @@
         </div>
       </div>
 
-      <TopUpModal
-        :is-open="showTopUpModal"
-        @close="showTopUpModal = false"
-        @success="handleTopUpSuccess"
-      />
-
       <ErrorDisplay
         :error="walletStore.error"
         :dismissible="true"
@@ -35,6 +29,11 @@
       />
     </div>
   </div>
+  <TopUpModal
+    :is-open="showTopUpModal"
+    @close="showTopUpModal = false"
+    @success="handleTopUpSuccess"
+  />
 </template>
 
 <script setup lang="ts">
@@ -45,6 +44,7 @@ import WalletBalance from '@/components/Wallet/WalletBalance.vue'
 import TransactionHistory from '@/components/Wallet/TransactionHistory.vue'
 import TopUpModal from '@/components/Wallet/TopUpModal.vue'
 import ErrorDisplay from '@/components/ErrorDisplay.vue'
+import { UI_CONSTANTS } from '@/constants'
 
 const route = useRoute()
 const walletStore = useWalletStore()
@@ -65,7 +65,7 @@ const handleNavigateToWallet = () => {
 }
 
 onMounted(() => {
-  if (route.query.openTopUp === 'true') {
+  if (route.query[UI_CONSTANTS.TOP_UP_MODAL_PARAM] === 'true') {
     showTopUpModal.value = true
   }
 })

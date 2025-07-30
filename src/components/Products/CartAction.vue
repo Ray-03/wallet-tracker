@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useCartStore } from '@/store/cart'
 import IconPlus from '../icons/IconPlus.vue'
-import type { Product } from '../types'
+import type { Product, CartItem } from '@/types'
 
-const props = defineProps<{ product: Product }>()
+const props = defineProps<{ product: Product | CartItem }>()
 const cartStore = useCartStore()
 
 const handleAddToCart = (event: Event) => {

@@ -1,9 +1,8 @@
 import { defineStore } from 'pinia'
-import type { Product, ProductsState } from '../components/types'
+import type { Product, ProductsState } from '@/types'
 import { apiRequest } from '@/backend/api'
 import { type WalletError } from '@/utils/errors'
-
-const API_URL = 'https://fakestoreapi.com/products'
+import { API_CONFIG } from '@/constants'
 
 export const useProductsStore = defineStore('products', {
   state: (): ProductsState => ({
@@ -23,7 +22,7 @@ export const useProductsStore = defineStore('products', {
     },
     async getAllProducts() {
       const res = await apiRequest<Product[]>(
-        { method: 'get', url: API_URL },
+        { method: 'get', url: `${API_CONFIG.BASE_URL}${API_CONFIG.PRODUCTS_ENDPOINT}` },
         { setLoading: this.setLoading, setError: this.setError },
       )
       if (res) {
@@ -40,23 +39,28 @@ export const useProductsStore = defineStore('products', {
         this.filteredProducts = this.products
       } else {
         const query = this.searchQuery.toLowerCase()
-        this.filteredProducts = this.products.filter(product =>
-          product.title.toLowerCase().includes(query) ||
-          product.description.toLowerCase().includes(query) ||
-          product.category.toLowerCase().includes(query)
+        this.filteredProducts = this.products.filter(
+          (product) =>
+            product.title.toLowerCase().includes(query) ||
+            product.description.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query),
         )
       }
     },
     async getProductById(id: number) {
       const res = await apiRequest<Product>(
-        { method: 'get', url: `${API_URL}/${id}` },
+        { method: 'get', url: `${API_CONFIG.BASE_URL}${API_CONFIG.PRODUCTS_ENDPOINT}/${id}` },
         { setLoading: this.setLoading, setError: this.setError },
       )
       if (res) this.product = res.data
     },
     async addProduct(product: Omit<Product, 'id'>) {
       const res = await apiRequest<Product>(
-        { method: 'post', url: API_URL, data: product },
+        {
+          method: 'post',
+          url: `${API_CONFIG.BASE_URL}${API_CONFIG.PRODUCTS_ENDPOINT}`,
+          data: product,
+        },
         { setLoading: this.setLoading, setError: this.setError },
       )
       if (res) this.products.push(res.data)
@@ -65,7 +69,7 @@ export const useProductsStore = defineStore('products', {
       const res = await apiRequest<Product>(
         {
           method: 'put',
-          url: `${API_URL}/${id}`,
+          url: `${API_CONFIG.BASE_URL}${API_CONFIG.PRODUCTS_ENDPOINT}/${id}`,
           data: product,
         },
         { setLoading: this.setLoading, setError: this.setError },
@@ -77,7 +81,7 @@ export const useProductsStore = defineStore('products', {
     },
     async deleteProduct(id: number) {
       const res = await apiRequest(
-        { method: 'delete', url: `${API_URL}/${id}` },
+        { method: 'delete', url: `${API_CONFIG.BASE_URL}${API_CONFIG.PRODUCTS_ENDPOINT}/${id}` },
         { setLoading: this.setLoading, setError: this.setError },
       )
       if (res) this.products = this.products.filter((p) => p.id !== id)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Product } from '../types'
+import type { Product } from '@/types'
 import CardHeader from './CardHeader.vue'
 import CardBody from './CardBody.vue'
 

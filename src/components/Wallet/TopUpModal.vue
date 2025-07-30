@@ -102,7 +102,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useWalletStore } from '@/store/wallet'
-import type { Transaction } from '@/store/wallet'
+import type { Transaction } from '@/types'
 import ErrorDisplay from '@/components/ErrorDisplay.vue'
 
 interface Props {

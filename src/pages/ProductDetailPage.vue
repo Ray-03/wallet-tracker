@@ -4,6 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useProductsStore } from '@/store/products'
 import ErrorDisplay from '@/components/ErrorDisplay.vue'
 import CartAction from '@/components/Products/CartAction.vue'
+import { formatCurrency } from '@/utils/ui'
+import { ROUTES } from '@/constants'
 
 const route = useRoute()
 const router = useRouter()
@@ -22,7 +24,7 @@ onMounted(async () => {
   if (productId.value && !isNaN(productId.value)) {
     await productsStore.getProductById(productId.value)
   } else {
-    router.push('/')
+    router.push(ROUTES.HOME)
   }
 })
 
@@ -116,7 +118,9 @@ const goBack = () => {
 
               <h1 class="text-3xl font-bold text-gray-900">{{ product.title }}</h1>
 
-              <div class="text-2xl font-bold text-green-600">${{ product.price.toFixed(2) }}</div>
+              <div class="text-2xl font-bold text-green-600">
+                {{ formatCurrency(product.price) }}
+              </div>
 
               <div class="text-gray-700 leading-relaxed">
                 <p>{{ product.description }}</p>

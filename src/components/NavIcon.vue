@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { NavIconProps } from './types.ts'
+import type { NavIconProps } from '@/types'
 
 defineProps<NavIconProps>()
 </script>

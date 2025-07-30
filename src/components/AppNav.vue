@@ -68,8 +68,8 @@ import NavIcon from './NavIcon.vue'
 import SearchInput from './SearchInput.vue'
 import IconShoppingBag from './icons/IconShoppingBag.vue'
 import IconMagnifier from './icons/IconMagnifier.vue'
-import { NavSection } from './types'
-import type { INavLink } from './types'
+import { NavSection } from '@/types'
+import type { NavLink } from '@/types'
 import { useCartStore } from '@/store/cart'
 import { useProductsStore } from '@/store/products'
 
@@ -88,11 +88,11 @@ const cartItemCount = computed(() =>
   cartStore.itemsArray.reduce((total, item) => total + item.quantity, 0),
 )
 
-const baseLinks: Record<NavSection, Partial<INavLink> & { name: NavSection }> = {
+const baseLinks: Record<NavSection, Partial<NavLink> & { name: NavSection }> = {
   [NavSection.Home]: { name: NavSection.Home, href: '/', icon: '/icon.jpg', alt: 'Home' },
   [NavSection.Wallet]: { name: NavSection.Wallet, href: 'wallet' },
   [NavSection.History]: { name: NavSection.History, href: 'history' },
-  [NavSection.Cart]: { name: NavSection.Cart, href: 'cart', icon: IconShoppingBag, alt: 'Cart' },
+  [NavSection.Cart]: { name: NavSection.Cart, href: '/cart', icon: IconShoppingBag, alt: 'Cart' },
   [NavSection.Search]: { name: NavSection.Search, href: '#', icon: IconMagnifier, alt: 'Search' },
 }
 

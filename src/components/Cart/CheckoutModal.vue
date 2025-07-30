@@ -117,7 +117,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { CartItem } from '@/store/cart'
+import type { CartItem } from '@/types'
 import type { WalletError } from '@/utils/errors'
 import IconPlus from '../icons/IconPlus.vue'
 import ErrorDisplay from '../ErrorDisplay.vue'

@@ -16,16 +16,16 @@
             <div class="flex-1">
               <div class="font-medium">{{ item.title }}</div>
               <div class="text-gray-500 text-sm">
-                ${{ item.price.toFixed(2) }} x {{ item.quantity }}
+                {{ formatCurrency(item.price) }} x {{ item.quantity }}
               </div>
             </div>
             <div class="font-semibold text-right">
-              ${{ (item.price * item.quantity).toFixed(2) }}
+              {{ formatCurrency(item.price * item.quantity) }}
             </div>
           </div>
         </div>
         <div class="flex justify-end mt-4">
-          <div class="text-lg font-bold">Total: ${{ Math.abs(tx.amount).toFixed(2) }}</div>
+          <div class="text-lg font-bold">Total: {{ formatCurrency(Math.abs(tx.amount)) }}</div>
         </div>
       </div>
     </div>
@@ -44,6 +44,8 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWalletStore } from '@/store/wallet'
 import ErrorDisplay from '@/components/ErrorDisplay.vue'
+import { UI_CONSTANTS } from '@/constants'
+import { formatDate, formatCurrency } from '@/utils/ui'
 
 const router = useRouter()
 const walletStore = useWalletStore()
@@ -55,16 +57,6 @@ const purchases = computed(() =>
 
 function handleNavigateToWallet() {
   walletStore.setError(null)
-  router.push('/wallet?openTopUp=true')
-}
-
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(date)
+  router.push(`/wallet?${UI_CONSTANTS.TOP_UP_MODAL_PARAM}=true`)
 }
 </script>

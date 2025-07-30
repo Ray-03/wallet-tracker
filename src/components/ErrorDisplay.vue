@@ -59,7 +59,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { type WalletError, ErrorCode } from '@/utils/errors'
+import type { WalletError } from '@/utils/errors'
+import { ErrorCode } from '@/utils/errors'
 import IconPlus from './icons/IconPlus.vue'
 
 interface Props {

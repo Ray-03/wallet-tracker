@@ -1,25 +1,9 @@
 import { defineStore } from 'pinia'
-import type { CartItem } from './cart'
+import type { CartItem, Transaction, WalletState } from '@/types'
 import { WalletError, createWalletError, handleError } from '@/utils/errors'
-
-export interface Transaction {
-  id: string
-  type: 'topup' | 'purchase' | 'refund'
-  amount: number
-  description: string
-  timestamp: Date
-  status: 'completed' | 'pending' | 'failed'
-
-  items?: CartItem[]
-  invoiceNumber?: string
-}
-
-export interface WalletState {
-  balance: number
-  transactions: Transaction[]
-  loading: boolean
-  error: WalletError | null
-}
+import { walletStorage } from '@/utils/storage'
+import { generateTransactionId, calculateTotal } from '@/utils/ui'
+import { TRANSACTION_TYPES, TRANSACTION_STATUS } from '@/constants'
 
 export const useWalletStore = defineStore('wallet', {
   state: (): WalletState => ({
@@ -58,12 +42,12 @@ export const useWalletStore = defineStore('wallet', {
         }
 
         const transaction: Transaction = {
-          id: `tx_${Math.floor(Date.now() / 1000)}_${Math.random().toString(36).substring(2, 9)}`,
-          type: 'topup',
+          id: generateTransactionId(),
+          type: TRANSACTION_TYPES.TOPUP,
           amount,
           description,
           timestamp: new Date(),
-          status: 'completed',
+          status: TRANSACTION_STATUS.COMPLETED,
         }
 
         this.balance += amount
@@ -90,7 +74,7 @@ export const useWalletStore = defineStore('wallet', {
           throw createWalletError.noItemsToPurchase()
         }
 
-        const amount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+        const amount = calculateTotal(items)
         if (amount <= 0) {
           throw createWalletError.invalidPurchaseAmount(amount)
         }
@@ -102,12 +86,12 @@ export const useWalletStore = defineStore('wallet', {
         const invoiceNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 10000)}`
 
         const transaction: Transaction = {
-          id: `tx_${Math.floor(Date.now() / 1000)}_${Math.random().toString(36).substring(2, 9)}`,
-          type: 'purchase',
+          id: generateTransactionId(),
+          type: TRANSACTION_TYPES.PURCHASE,
           amount: -amount,
           description,
           timestamp: new Date(),
-          status: 'completed',
+          status: TRANSACTION_STATUS.COMPLETED,
           items,
           invoiceNumber,
         }
@@ -142,12 +126,12 @@ export const useWalletStore = defineStore('wallet', {
         }
 
         const refundTransaction: Transaction = {
-          id: `tx_${Math.floor(Date.now() / 1000)}_${Math.random().toString(36).substring(2, 9)}`,
-          type: 'refund',
+          id: generateTransactionId(),
+          type: TRANSACTION_TYPES.REFUND,
           amount,
           description,
           timestamp: new Date(),
-          status: 'completed',
+          status: TRANSACTION_STATUS.COMPLETED,
         }
 
         this.balance += amount
@@ -167,8 +151,10 @@ export const useWalletStore = defineStore('wallet', {
 
     saveToLocalStorage() {
       try {
-        localStorage.setItem('wallet_balance', this.balance.toString())
-        localStorage.setItem('wallet_transactions', JSON.stringify(this.transactions))
+        walletStorage.save({
+          balance: this.balance,
+          transactions: this.transactions,
+        })
       } catch (error) {
         const storageError = createWalletError.storageError(
           'save',
@@ -181,21 +167,17 @@ export const useWalletStore = defineStore('wallet', {
 
     initializeWallet() {
       try {
-        const savedBalance = localStorage.getItem('wallet_balance')
-        const savedTransactions = localStorage.getItem('wallet_transactions')
+        const savedData = walletStorage.load<{
+          balance: number
+          transactions: Array<Omit<Transaction, 'timestamp'> & { timestamp: string }>
+        }>()
 
-        if (savedBalance) {
-          this.balance = parseFloat(savedBalance)
-        }
-
-        if (savedTransactions) {
-          const parsedTransactions = JSON.parse(savedTransactions)
-          this.transactions = parsedTransactions.map(
-            (t: Omit<Transaction, 'timestamp'> & { timestamp: string }) => ({
-              ...t,
-              timestamp: new Date(t.timestamp),
-            }),
-          )
+        if (savedData) {
+          this.balance = savedData.balance
+          this.transactions = savedData.transactions.map((t) => ({
+            ...t,
+            timestamp: new Date(t.timestamp),
+          }))
         }
       } catch (error) {
         const storageError = createWalletError.storageError(

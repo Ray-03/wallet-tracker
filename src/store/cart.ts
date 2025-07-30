@@ -1,13 +1,6 @@
 import { defineStore } from 'pinia'
-import type { Product } from '@/components/types'
-
-export interface CartItem extends Product {
-  quantity: number
-}
-
-export interface CartState {
-  items: { [id: number]: CartItem }
-}
+import type { CartState, Product } from '@/types'
+import { cartStorage } from '@/utils/storage'
 
 export const useCartStore = defineStore('cart', {
   state: (): CartState => ({
@@ -49,12 +42,12 @@ export const useCartStore = defineStore('cart', {
       this.saveCart()
     },
     saveCart() {
-      localStorage.setItem('cart_items', JSON.stringify(this.items))
+      cartStorage.save(this.items)
     },
     loadCart() {
-      const saved = localStorage.getItem('cart_items')
+      const saved = cartStorage.load<CartState['items']>()
       if (saved) {
-        this.items = JSON.parse(saved)
+        this.items = saved
       }
     },
   },
