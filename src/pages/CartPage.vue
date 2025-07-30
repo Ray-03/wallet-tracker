@@ -31,28 +31,48 @@
         <button
           class="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-md font-medium"
           :disabled="cartStore.itemsArray.length === 0 || walletStore.loading"
-          @click="checkout"
+          @click="showCheckoutModal = true"
         >
           Checkout
         </button>
       </div>
       <div v-if="successMessage" class="mt-4 text-green-600 text-center">Purchase successful!</div>
-      <div v-if="walletStore.error" class="mt-4 text-red-600 text-center">
-        {{ walletStore.error }}
-      </div>
+      <ErrorDisplay
+        :error="walletStore.error"
+        :dismissible="true"
+        @dismiss="walletStore.setError(null)"
+        @navigate-to-wallet="handleNavigateToWallet"
+      />
     </div>
+
+    <CheckoutModal
+      :is-open="showCheckoutModal"
+      :items="cartStore.itemsArray"
+      :total="total"
+      :current-balance="walletStore.getBalance"
+      :loading="walletStore.loading"
+      :error="walletStore.error"
+      @close="showCheckoutModal = false"
+      @confirm="processCheckout"
+      @top-up="handleTopUpFromModal"
+      @dismiss-error="walletStore.setError(null)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useCartStore, type LineItem } from '@/store/cart'
 import { useWalletStore } from '@/store/wallet'
+import ErrorDisplay from '@/components/ErrorDisplay.vue'
+import CheckoutModal from '@/components/Cart/CheckoutModal.vue'
 
+const router = useRouter()
 const cartStore = useCartStore()
-cartStore.loadCart()
 const walletStore = useWalletStore()
 const successMessage = ref(false)
+const showCheckoutModal = ref(false)
 
 const total = computed(() =>
   cartStore.itemsArray.reduce((sum, item) => sum + item.price * item.quantity, 0),
@@ -66,10 +86,22 @@ function removeItem(id: number) {
   cartStore.removeItem(id)
 }
 
-async function checkout() {
+function handleNavigateToWallet() {
+  walletStore.setError(null)
+  router.push('/wallet?openTopUp=true')
+}
+
+function handleTopUpFromModal() {
+  walletStore.setError(null)
+  showCheckoutModal.value = false
+  router.push('/wallet?openTopUp=true')
+}
+
+async function processCheckout() {
   try {
     await walletStore.makePurchase([...cartStore.itemsArray], 'Cart checkout')
     cartStore.clearCart()
+    showCheckoutModal.value = false
     successMessage.value = true
     setTimeout(() => (successMessage.value = false), 3000)
   } catch {}
