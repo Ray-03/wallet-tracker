@@ -15,16 +15,10 @@
           <div class="font-semibold">{{ item.title }}</div>
           <div class="text-gray-500">${{ item.price.toFixed(2) }}</div>
         </div>
-        <input
-          type="number"
-          min="1"
-          class="w-16 border rounded px-2 py-1 mr-2 text-center"
-          v-model.number="item.quantity"
-          @change="updateQuantity(item)"
-        />
-        <button @click="removeItem(item.id)" class="text-red-500 hover:underline ml-2">
-          Remove
-        </button>
+        <div class="flex items-center space-x-2">
+          <CartAction :product="item" />
+          <button @click="removeItem(item.id)" class="text-red-500 hover:underline">Remove</button>
+        </div>
       </div>
       <div class="flex justify-between items-center mt-6">
         <div class="text-lg font-semibold">Total: ${{ total.toFixed(2) }}</div>
@@ -63,10 +57,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCartStore, type LineItem } from '@/store/cart'
+import { useCartStore } from '@/store/cart'
 import { useWalletStore } from '@/store/wallet'
 import ErrorDisplay from '@/components/ErrorDisplay.vue'
 import CheckoutModal from '@/components/Cart/CheckoutModal.vue'
+import CartAction from '@/components/Products/CartAction.vue'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -77,10 +72,6 @@ const showCheckoutModal = ref(false)
 const total = computed(() =>
   cartStore.itemsArray.reduce((sum, item) => sum + item.price * item.quantity, 0),
 )
-
-function updateQuantity(item: LineItem) {
-  cartStore.updateQuantity(item.id, item.quantity)
-}
 
 function removeItem(id: number) {
   cartStore.removeItem(id)

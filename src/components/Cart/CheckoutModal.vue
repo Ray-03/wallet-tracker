@@ -117,14 +117,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { LineItem } from '@/store/cart'
+import type { CartItem } from '@/store/cart'
 import type { WalletError } from '@/utils/errors'
 import IconPlus from '../icons/IconPlus.vue'
 import ErrorDisplay from '../ErrorDisplay.vue'
 
 interface Props {
   isOpen: boolean
-  items: LineItem[]
+  items: CartItem[]
   total: number
   currentBalance: number
   loading?: boolean

@@ -1,16 +1,12 @@
 import { defineStore } from 'pinia'
 import type { Product } from '@/components/types'
 
-export interface LineItem {
-  id: number
-  title: string
-  price: number
-  image: string
+export interface CartItem extends Product {
   quantity: number
 }
 
 export interface CartState {
-  items: { [id: number]: LineItem }
+  items: { [id: number]: CartItem }
 }
 
 export const useCartStore = defineStore('cart', {
@@ -27,10 +23,7 @@ export const useCartStore = defineStore('cart', {
         this.items[product.id] = { ...existing, quantity: existing.quantity + quantity }
       } else {
         this.items[product.id] = {
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          image: product.image,
+          ...product,
           quantity,
         }
       }

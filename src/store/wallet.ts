@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { LineItem } from './cart'
+import type { CartItem } from './cart'
 import { WalletError, createWalletError, handleError } from '@/utils/errors'
 
 export interface Transaction {
@@ -10,7 +10,7 @@ export interface Transaction {
   timestamp: Date
   status: 'completed' | 'pending' | 'failed'
 
-  items?: LineItem[]
+  items?: CartItem[]
   invoiceNumber?: string
 }
 
@@ -81,7 +81,7 @@ export const useWalletStore = defineStore('wallet', {
       }
     },
 
-    async makePurchase(items: LineItem[], description: string) {
+    async makePurchase(items: CartItem[], description: string) {
       this.setLoading(true)
       this.setError(null)
 
