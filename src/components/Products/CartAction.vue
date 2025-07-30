@@ -21,14 +21,28 @@ const handleInputChange = (event: Event) => {
 <template>
   <div class="p-2 h-10 flex items-center">
     <template v-if="cartStore.items[product.id]">
-      <input
-        type="number"
-        min="0"
-        step="1"
-        :value="cartStore.items[product.id].quantity"
-        @input="handleInputChange"
-        class="border rounded px-2 py-1 text-center w-10 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [appearance:textfield]"
-      />
+      <div class="flex items-center space-x-1">
+        <button
+          @click="cartStore.updateQuantity(product.id, cartStore.items[product.id].quantity - 1)"
+          class="w-6 h-6 bg-gray-200 hover:bg-gray-300 rounded flex items-center justify-center text-gray-600 transition-colors"
+        >
+          <span class="text-sm font-bold">−</span>
+        </button>
+        <input
+          type="number"
+          min="0"
+          step="1"
+          :value="cartStore.items[product.id].quantity"
+          @input="handleInputChange"
+          class="border rounded px-2 py-1 text-center w-12 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [appearance:textfield]"
+        />
+        <button
+          @click="cartStore.updateQuantity(product.id, cartStore.items[product.id].quantity + 1)"
+          class="w-6 h-6 bg-primary-500 hover:bg-primary-600 rounded flex items-center justify-center text-white transition-colors"
+        >
+          <span class="text-sm font-bold">+</span>
+        </button>
+      </div>
     </template>
     <template v-else>
       <button
