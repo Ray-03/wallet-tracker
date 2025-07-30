@@ -25,9 +25,11 @@ export interface Product {
   image: string
 }
 
+import { type WalletError } from '@/utils/errors'
+
 export interface ProductsState {
   products: Product[]
   product: Product | null
   loading: boolean
-  error: string | null
+  error: WalletError | null
 }
