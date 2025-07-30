@@ -15,25 +15,6 @@
         <span>Top Up</span>
       </button>
     </div>
-
-    <div v-if="walletStore.getTransactionHistory.length > 0" class="mt-4">
-      <p class="text-blue-200 text-sm mb-2">Recent Activity</p>
-      <div class="space-y-2">
-        <div
-          v-for="transaction in walletStore.getTransactionHistory.slice(0, 3)"
-          :key="transaction.id"
-          class="flex justify-between items-center text-sm"
-        >
-          <span class="text-blue-100 truncate">{{ transaction.description }}</span>
-          <span
-            :class="transaction.amount >= 0 ? 'text-green-300' : 'text-red-300'"
-            class="font-medium"
-          >
-            {{ transaction.amount >= 0 ? '+' : '' }}${{ Math.abs(transaction.amount).toFixed(2) }}
-          </span>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 

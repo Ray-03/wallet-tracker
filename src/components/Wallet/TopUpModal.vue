@@ -90,12 +90,11 @@
         </div>
       </form>
 
-      <div
-        v-if="walletStore.error"
-        class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md"
-      >
-        {{ walletStore.error }}
-      </div>
+      <ErrorDisplay
+        :error="walletStore.error"
+        :dismissible="true"
+        @dismiss="walletStore.setError(null)"
+      />
     </div>
   </div>
 </template>
@@ -104,6 +103,7 @@
 import { ref, computed, watch } from 'vue'
 import { useWalletStore } from '@/store/wallet'
 import type { Transaction } from '@/store/wallet'
+import ErrorDisplay from '@/components/ErrorDisplay.vue'
 
 interface Props {
   isOpen: boolean
