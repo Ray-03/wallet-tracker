@@ -1,11 +1,18 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { useProductsStore } from '@/store/products'
 import ProductCard from './ProductCard.vue'
 import ErrorDisplay from '@/components/ErrorDisplay.vue'
+import type { Product } from '@/components/types'
 
+const router = useRouter()
 const store = useProductsStore()
 
 await store.getAllProducts()
+
+const handleProductClick = (product: Product) => {
+  router.push(`/product/${product.id}`)
+}
 </script>
 
 <template>
@@ -40,7 +47,12 @@ await store.getAllProducts()
       v-else-if="store.filteredProducts.length"
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
     >
-      <ProductCard v-for="product in store.filteredProducts" :key="product.id" :product="product" />
+      <ProductCard
+        v-for="product in store.filteredProducts"
+        :key="product.id"
+        :product="product"
+        @click="handleProductClick"
+      />
     </div>
 
     <div v-else class="text-center py-8">

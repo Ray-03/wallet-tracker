@@ -79,7 +79,6 @@ const productsStore = useProductsStore()
 
 function handleSearch(query: string) {
   productsStore.searchProducts(query)
-  // Only navigate if not already on home page
   if (router.currentRoute.value.path !== '/') {
     router.push('/')
   }
