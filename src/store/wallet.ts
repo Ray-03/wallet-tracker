@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import type { LineItem } from './cart'
+import { WalletError, createWalletError, handleError } from '@/utils/errors'
 
 export interface Transaction {
   id: string
@@ -17,7 +18,7 @@ export interface WalletState {
   balance: number
   transactions: Transaction[]
   loading: boolean
-  error: string | null
+  error: WalletError | null
 }
 
 export const useWalletStore = defineStore('wallet', {
@@ -40,7 +41,7 @@ export const useWalletStore = defineStore('wallet', {
       this.loading = loading
     },
 
-    setError(error: string | null) {
+    setError(error: WalletError | null) {
       this.error = error
     },
 
@@ -53,7 +54,7 @@ export const useWalletStore = defineStore('wallet', {
         await new Promise((resolve) => setTimeout(resolve, 1000))
 
         if (amount <= 0) {
-          throw new Error('Top-up amount must be greater than 0')
+          throw createWalletError.invalidTopUpAmount(amount)
         }
 
         const transaction: Transaction = {
@@ -72,8 +73,9 @@ export const useWalletStore = defineStore('wallet', {
 
         return transaction
       } catch (error) {
-        this.setError(error instanceof Error ? error.message : 'Top-up failed')
-        throw error
+        const walletError = handleError(error)
+        this.setError(walletError)
+        throw walletError
       } finally {
         this.setLoading(false)
       }
@@ -85,16 +87,16 @@ export const useWalletStore = defineStore('wallet', {
 
       try {
         if (!items.length) {
-          throw new Error('No items to purchase')
+          throw createWalletError.noItemsToPurchase()
         }
 
         const amount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
         if (amount <= 0) {
-          throw new Error('Purchase amount must be greater than 0')
+          throw createWalletError.invalidPurchaseAmount(amount)
         }
 
         if (this.balance < amount) {
-          throw new Error('Insufficient balance')
+          throw createWalletError.insufficientBalance(amount, this.balance)
         }
 
         const invoiceNumber = `INV-${Date.now()}-${Math.floor(Math.random() * 10000)}`
@@ -117,8 +119,9 @@ export const useWalletStore = defineStore('wallet', {
 
         return transaction
       } catch (error) {
-        this.setError(error instanceof Error ? error.message : 'Purchase failed')
-        throw error
+        const walletError = handleError(error)
+        this.setError(walletError)
+        throw walletError
       } finally {
         this.setLoading(false)
       }
@@ -131,7 +134,11 @@ export const useWalletStore = defineStore('wallet', {
       try {
         const originalTransaction = this.transactions.find((t) => t.id === transactionId)
         if (!originalTransaction) {
-          throw new Error('Transaction not found')
+          throw createWalletError.transactionNotFound(transactionId)
+        }
+
+        if (amount <= 0) {
+          throw createWalletError.invalidRefundAmount(amount)
         }
 
         const refundTransaction: Transaction = {
@@ -150,8 +157,9 @@ export const useWalletStore = defineStore('wallet', {
 
         return refundTransaction
       } catch (error) {
-        this.setError(error instanceof Error ? error.message : 'Refund failed')
-        throw error
+        const walletError = handleError(error)
+        this.setError(walletError)
+        throw walletError
       } finally {
         this.setLoading(false)
       }
@@ -162,7 +170,12 @@ export const useWalletStore = defineStore('wallet', {
         localStorage.setItem('wallet_balance', this.balance.toString())
         localStorage.setItem('wallet_transactions', JSON.stringify(this.transactions))
       } catch (error) {
-        console.error('Error saving wallet data:', error)
+        const storageError = createWalletError.storageError(
+          'save',
+          error instanceof Error ? error : undefined,
+        )
+        console.error('Error saving wallet data:', storageError)
+        throw storageError
       }
     },
 
@@ -185,7 +198,11 @@ export const useWalletStore = defineStore('wallet', {
           )
         }
       } catch (error) {
-        console.error('Error loading wallet data:', error)
+        const storageError = createWalletError.storageError(
+          'load',
+          error instanceof Error ? error : undefined,
+        )
+        console.error('Error loading wallet data:', storageError)
       }
     },
   },
