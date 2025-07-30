@@ -37,10 +37,10 @@ await store.getAllProducts()
     </div>
 
     <div
-      v-else-if="store.products.length"
+      v-else-if="store.filteredProducts.length"
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
     >
-      <ProductCard v-for="product in store.products" :key="product.id" :product="product" />
+      <ProductCard v-for="product in store.filteredProducts" :key="product.id" :product="product" />
     </div>
 
     <div v-else class="text-center py-8">

@@ -30,7 +30,9 @@ import { type WalletError } from '@/utils/errors'
 
 export interface ProductsState {
   products: Product[]
+  filteredProducts: Product[]
   product: Product | null
   loading: boolean
   error: WalletError | null
+  searchQuery: string
 }

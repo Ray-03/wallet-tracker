@@ -8,7 +8,7 @@
       <NavIcon :icon="homeLink.icon" :alt="homeLink.alt" :name="homeLink.name" />
     </a>
     <div class="flex-1 mx-4">
-      <SearchInput class="w-full" />
+      <SearchInput class="w-full" @search="handleSearch" />
     </div>
     <div class="flex gap-4 items-center">
       <template v-for="link in desktopLinks" :key="link.name">
@@ -41,7 +41,7 @@
         />
       </a>
       <div class="flex-1 mx-2">
-        <SearchInput class="w-full" />
+        <SearchInput class="w-full" @search="handleSearch" />
       </div>
     </div>
 
@@ -63,6 +63,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import NavIcon from './NavIcon.vue'
 import SearchInput from './SearchInput.vue'
 import IconShoppingBag from './icons/IconShoppingBag.vue'
@@ -70,8 +71,19 @@ import IconMagnifier from './icons/IconMagnifier.vue'
 import { NavSection } from './types'
 import type { INavLink } from './types'
 import { useCartStore } from '@/store/cart'
+import { useProductsStore } from '@/store/products'
 
 const cartStore = useCartStore()
+const router = useRouter()
+const productsStore = useProductsStore()
+
+function handleSearch(query: string) {
+  productsStore.searchProducts(query)
+  // Only navigate if not already on home page
+  if (router.currentRoute.value.path !== '/') {
+    router.push('/')
+  }
+}
 
 const cartItemCount = computed(() =>
   cartStore.itemsArray.reduce((total, item) => total + item.quantity, 0),

@@ -8,9 +8,11 @@ const API_URL = 'https://fakestoreapi.com/products'
 export const useProductsStore = defineStore('products', {
   state: (): ProductsState => ({
     products: [],
+    filteredProducts: [],
     product: null,
     loading: false,
     error: null,
+    searchQuery: '',
   }),
   actions: {
     setLoading(loading: boolean) {
@@ -24,7 +26,26 @@ export const useProductsStore = defineStore('products', {
         { method: 'get', url: API_URL },
         { setLoading: this.setLoading, setError: this.setError },
       )
-      if (res) this.products = res.data
+      if (res) {
+        this.products = res.data
+        this.filterProducts()
+      }
+    },
+    searchProducts(query: string) {
+      this.searchQuery = query
+      this.filterProducts()
+    },
+    filterProducts() {
+      if (!this.searchQuery.trim()) {
+        this.filteredProducts = this.products
+      } else {
+        const query = this.searchQuery.toLowerCase()
+        this.filteredProducts = this.products.filter(product =>
+          product.title.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query) ||
+          product.category.toLowerCase().includes(query)
+        )
+      }
     },
     async getProductById(id: number) {
       const res = await apiRequest<Product>(

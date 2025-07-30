@@ -35,7 +35,6 @@ const searchQuery = ref(props.modelValue ?? '')
 
 function onEnter() {
   emit('search', searchQuery.value)
-  console.log('Search triggered:', searchQuery.value)
 }
 
 function clearSearch() {
