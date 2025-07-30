@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useProductsStore } from '@/store/products'
 import ProductCard from './ProductCard.vue'
+import ErrorDisplay from '@/components/ErrorDisplay.vue'
 
 const store = useProductsStore()
 
@@ -26,10 +27,10 @@ await store.getAllProducts()
         </svg>
       </div>
       <h3 class="text-lg font-medium text-gray-900 mb-2">Failed to load products</h3>
-      <p class="text-gray-600 mb-4">{{ store.error }}</p>
+      <ErrorDisplay :error="store.error" :dismissible="false" />
       <button
         @click="store.getAllProducts()"
-        class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+        class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
       >
         Try Again
       </button>
