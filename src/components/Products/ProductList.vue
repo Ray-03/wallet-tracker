@@ -1,0 +1,62 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router'
+import { useProductsStore } from '@/store/products'
+import ProductCard from './ProductCard.vue'
+import ErrorDisplay from '@/components/ErrorDisplay.vue'
+import type { Product } from '@/types'
+
+const router = useRouter()
+const store = useProductsStore()
+
+await store.getAllProducts()
+
+const handleProductClick = (product: Product) => {
+  router.push(`/product/${product.id}`)
+}
+</script>
+
+<template>
+  <div class="container mx-auto px-4 py-8">
+    <div v-if="store.error" class="text-center py-8">
+      <div class="mb-4">
+        <svg
+          class="mx-auto h-12 w-12 text-red-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+          />
+        </svg>
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">Failed to load products</h3>
+      <ErrorDisplay :error="store.error" :dismissible="false" />
+      <button
+        @click="store.getAllProducts()"
+        class="mt-4 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+      >
+        Try Again
+      </button>
+    </div>
+
+    <div
+      v-else-if="store.filteredProducts.length"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    >
+      <ProductCard
+        v-for="product in store.filteredProducts"
+        :key="product.id"
+        :product="product"
+        @click="handleProductClick"
+      />
+    </div>
+
+    <div v-else class="text-center py-8">
+      <p class="text-gray-600 text-lg">No products found.</p>
+    </div>
+  </div>
+</template>
