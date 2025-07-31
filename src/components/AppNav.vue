@@ -90,8 +90,8 @@ const cartItemCount = computed(() =>
 
 const baseLinks: Record<NavSection, Partial<NavLink> & { name: NavSection }> = {
   [NavSection.Home]: { name: NavSection.Home, href: '/', icon: '/icon.jpg', alt: 'Home' },
-  [NavSection.Wallet]: { name: NavSection.Wallet, href: 'wallet' },
-  [NavSection.History]: { name: NavSection.History, href: 'history' },
+  [NavSection.Wallet]: { name: NavSection.Wallet, href: '/wallet' },
+  [NavSection.History]: { name: NavSection.History, href: '/history' },
   [NavSection.Cart]: { name: NavSection.Cart, href: '/cart', icon: IconShoppingBag, alt: 'Cart' },
   [NavSection.Search]: { name: NavSection.Search, href: '#', icon: IconMagnifier, alt: 'Search' },
 }
